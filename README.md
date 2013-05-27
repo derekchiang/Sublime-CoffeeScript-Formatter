@@ -12,9 +12,9 @@ Assuming you are editing a CoffeeScript file:
 
 Shortcut: `ctrl + alt + f`
 
-Context Menu: right click -> Format CoffeeScript
+Context Menu: right click -> Select `Format CoffeeScript`
 
-Command Palette: `ctrl + shift + p` -> Format: CoffeeScript
+Command Palette: `ctrl + shift + p` -> Select `Format: CoffeeScript`
 
 ## Installation
 
