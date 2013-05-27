@@ -4,6 +4,18 @@ This is a Sublime Text 2 plugin for formatting CoffeeScript.  It's based upon [t
 
 This project borrows heavily from [JsFormat](https://github.com/jdc0589/JsFormat).
 
+## Usage
+
+To use this package, the command `node` must be available.  See [here](http://nodejs.org/) for Node installation details.
+
+Assuming you are editing a CoffeeScript file:
+
+Shortcut: `ctrl + alt + f`
+
+Context Menu: right click -> Format CoffeeScript
+
+Command Palette: `ctrl + shift + p` -> Format: CoffeeScript
+
 ## Installation
 
 Sublime Package Control allows you to easily install or remove Coffee Formatter(and many other ST2 packages) from within the editor.
