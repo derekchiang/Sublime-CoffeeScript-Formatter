@@ -1,0 +1,7 @@
+[
+    { 
+    	"id": "coffeeformattermenu",
+    	"command": "coffee_format",
+    	"caption": "Format CoffeeScript"
+    }
+]
