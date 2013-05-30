@@ -105,7 +105,8 @@ This method shortens consecutive spaces into one single space.
       for operator in ONE_SPACE_OPERATORS
         newLine = ''
         for c, i in line
-          if (line.substr(i).indexOf(operator) == 0) and (notInStringOrComment i, line) and
+          if (line.substr(i).indexOf(operator) == 0) and
+          (notInStringOrComment i, line) and
 
 One exception has to be accounted for, which is experssion of the form `Object::property`
 
@@ -114,7 +115,11 @@ One exception has to be accounted for, which is experssion of the form `Object::
 
 Another exception: `if (options = arguments[i])?`
 
-          (line.substr(i+1).indexOf('?') != 0)
+          (line.substr(i+1).indexOf('?') != 0) and
+
+And also ")," and ")." shouldn't be separated by space:
+
+          (line.substr(i, 2) != ")," and line.substr(i, 2) != ").")
             newLine += "#{operator} " # Insert a space after
           else
             newLine += c
@@ -126,6 +131,9 @@ Another exception: `if (options = arguments[i])?`
 Note that the function should not shorten indentations.
 
     shortenSpaces = (line) ->
+      trimTrailing = (str) ->
+        str.replace /\s\s*$/, ""
+
       prevChar = null
       newLine = ''
 
@@ -141,7 +149,7 @@ Note that the function should not shorten indentations.
           newLine = newLine + c
         prevChar = c
 
-      return newLine
+      return trimTrailing newLine
 
 ### Body
 

@@ -87,7 +87,7 @@
       newLine = '';
       for (i = _j = 0, _len1 = line.length; _j < _len1; i = ++_j) {
         c = line[i];
-        if ((line.substr(i).indexOf(operator) === 0) && (notInStringOrComment(i, line)) && (line.substr(i).indexOf('::') !== 0) && (line.substr(i - 1).indexOf('::') !== 0) && (line.substr(i + 1).indexOf('?') !== 0)) {
+        if ((line.substr(i).indexOf(operator) === 0) && (notInStringOrComment(i, line)) && (line.substr(i).indexOf('::') !== 0) && (line.substr(i - 1).indexOf('::') !== 0) && (line.substr(i + 1).indexOf('?') !== 0) && (line.substr(i, 2) !== ")," && line.substr(i, 2) !== ").")) {
           newLine += "" + operator + " ";
         } else {
           newLine += c;
@@ -99,8 +99,11 @@
   };
 
   shortenSpaces = function(line) {
-    var c, i, newLine, prevChar, _i, _j, _len, _len1;
+    var c, i, newLine, prevChar, trimTrailing, _i, _j, _len, _len1;
 
+    trimTrailing = function(str) {
+      return str.replace(/\s\s*$/, "");
+    };
     prevChar = null;
     newLine = '';
     for (i = _i = 0, _len = line.length; _i < _len; i = ++_i) {
@@ -119,7 +122,7 @@
       }
       prevChar = c;
     }
-    return newLine;
+    return trimTrailing(newLine);
   };
 
   _ref = argv._;
