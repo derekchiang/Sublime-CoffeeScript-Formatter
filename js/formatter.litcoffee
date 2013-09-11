@@ -58,6 +58,17 @@ Given a line and an index, the function determines whether or not the index is i
                 return true
               else
                 return inStringOrComment (index - (ii + 1)), (line.substr (ii + 1))
+        # Match regex
+        if c == "/"
+          subLine = line.substr (i + 1)
+          for cc, ii in subLine
+            if cc == " "
+              continue
+            if cc == c
+              if i <= index <= (ii + i + 1)
+                return true
+              else
+                return inStringOrComment (index - (ii + 1)), (line.substr (ii + 1))
 
       return false
 

@@ -20,7 +20,7 @@ extend = ->
     type: (obj) ->
       (if not obj? then String(obj) else objectHelper.class2type[Object::toString.call(obj) ] or "object")
 
-    isPlainObject: (obj), ->
+    isPlainObject: (obj) ->
       return false if not obj or objectHelper.type(obj) isnt "object" or obj.nodeType or objectHelper.isWindow(obj)
       try
         return false if obj.constructor and not objectHelper.hasOwn.call(obj, "constructor") and not objectHelper.hasOwn.call(obj.constructor::, "isPrototypeOf")

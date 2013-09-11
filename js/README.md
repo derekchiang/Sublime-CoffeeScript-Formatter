@@ -30,3 +30,8 @@ To run the test suite, install [Mocha](https://github.com/visionmedia/mocha) and
 
 1. Get rid of external dependencies.
 2. Make a build script.
+
+
+## License
+
+[WTFPL](http://www.wtfpl.net/about/).
