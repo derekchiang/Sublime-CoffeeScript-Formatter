@@ -1,4 +1,8 @@
-import sublime, sublime_plugin, re, sys, os
+import sublime
+import sublime_plugin
+import re
+import sys
+import os
 from subprocess import call
 
 directory = os.path.dirname(os.path.realpath(__file__))
@@ -6,6 +10,8 @@ libs_path = os.path.join(directory, "libs")
 is_py2k = sys.version_info < (3, 0)
 
 # Use the original script to format a piece of code
+
+
 def format(code, opt):
 
     temp_coffee_path = os.path.join(directory, 'temp.coffee')
@@ -13,7 +19,8 @@ def format(code, opt):
     with open(temp_coffee_path, 'w') as f:
         f.write(code)
 
-    call(["node", os.path.join(directory, 'js', 'formatter.js'), temp_coffee_path])
+    call(["node", os.path.join(directory, 'js', 'formatter.js'),
+          temp_coffee_path])
 
     with open(os.path.join(directory, 'temp.coffee'), 'r') as f:
         return f.read()
@@ -21,6 +28,8 @@ def format(code, opt):
 # Python 2.x on Windows can't properly import from non-ASCII paths, so
 # this code added the DOC 8.3 version of the lib folder to the path in
 # case the user's username includes non-ASCII characters
+
+
 def add_lib_path(lib_path):
     def _try_get_short_path(path):
         path = os.path.normpath(path)
@@ -44,6 +53,7 @@ import merge_utils
 
 s = None
 
+
 def plugin_loaded():
     global s
     s = sublime.load_settings("CoffeeFormatter.sublime-settings")
@@ -59,40 +69,30 @@ def is_coffee_buffer(view):
     syntax = ""
     ext = ""
 
-    if (fName != None): # file exists, pull syntax type from extension
+    if (fName is not None):  # file exists, pull syntax type from extension
         ext = os.path.splitext(fName)[1][1:]
-    if(syntaxPath != None):
+    if (syntaxPath is not None):
         syntax = os.path.splitext(syntaxPath)[0].split('/')[-1].lower()
 
-    return ext in ['coffee', 'litcoffee'] or "coffeescript" in syntax or "coffeescript (literate)" in syntax
+    return ext in ['coffee', 'litcoffee'] or\
+        "coffeescript" in syntax or "coffeescript (literate)" in syntax
+
 
 class PreSaveFormatListner(sublime_plugin.EventListener):
+
     """Event listener to run CoffeeFormat during the presave event"""
+
     def on_pre_save(self, view):
-        if(s.get("format_on_save") == True and is_coffee_buffer(view)):
+        if(s.get("format_on_save") is True and is_coffee_buffer(view)):
             view.run_command("coffee_format")
 
 
 class CoffeeFormatCommand(sublime_plugin.TextCommand):
+
     def run(self, edit):
         # settings = self.view.settings()
 
         opts = {}
-
-        # settings
-        # opts.indent_char = " " if settings.get("translate_tabs_to_spaces") else "\t"
-        # opts.indent_size = int(settings.get("tab_size")) if opts.indent_char == " " else 1
-        # opts.max_preserve_newlines = s.get("max_preserve_newlines") or 3
-        # opts.preserve_newlines = s.get("preserve_newlines") or True
-        # opts.space_in_paren = s.get("space_in_paren") or False
-        # opts.jslint_happy = s.get("jslint_happy") or False
-        # opts.brace_style = s.get("brace_style") or "collapse"
-        # opts.keep_array_indentation = s.get("keep_array_indentation") or False
-        # opts.keep_function_indentation = s.get("keep_function_indentation") or False
-        # opts.indent_with_tabs = s.get("indent_with_tabs") or False
-        # opts.eval_code = s.get("eval_code") or False
-        # opts.unescape_strings = s.get("unescape_strings") or False
-        # opts.break_chained_methods = s.get("break_chained_methods") or False
 
         selection = self.view.sel()[0]
         formatSelection = False
@@ -124,7 +124,8 @@ class CoffeeFormatCommand(sublime_plugin.TextCommand):
                 ch = view.substr(i)
                 scope = view.scope_name(i)
                 # Skip preprocessors, strings, characaters and comments
-                if 'string.quoted' in scope or 'comment' in scope or 'preprocessor' in scope:
+                if 'string.quoted' in scope or\
+                        'comment' in scope or 'preprocessor' in scope:
                     extent = view.extract_scope(i)
                     i = extent.a - 1
                     continue
@@ -156,9 +157,11 @@ class CoffeeFormatCommand(sublime_plugin.TextCommand):
                 for _ in range(indent_count):
                     index = formatted_code.find('{') + 1
                     formatted_code = formatted_code[index:]
-                formatted_code = re.sub(r'[ \t]*\n([^\r\n])', r'\1', formatted_code, 1)
+                formatted_code = re.sub(r'[ \t]*\n([^\r\n])', r'\1',
+                                        formatted_code, 1)
             else:
-                # HACK: While no identation, a '{' will generate a blank line, so strip it.
+                # HACK: While no identation, a '{' will generate a blank line,
+                # so strip it.
                 search = "\n{"
                 if search not in code:
                     formatted_code = formatted_code.replace(search, '{', 1)
@@ -166,9 +169,11 @@ class CoffeeFormatCommand(sublime_plugin.TextCommand):
             view.replace(edit, region, formatted_code)
             # Region for replaced code
             if sel.a <= sel.b:
-                regions.append(sublime.Region(region.a, region.a + len(formatted_code)))
+                regions.append(sublime.Region(region.a, region.a + len(
+                    formatted_code)))
             else:
-                regions.append(sublime.Region(region.a + len(formatted_code), region.a))
+                regions.append(sublime.Region(region.a + len(
+                    formatted_code), region.a))
         view.sel().clear()
         # Add regions of formatted code
         [view.sel().add(region) for region in regions]
@@ -180,7 +185,8 @@ class CoffeeFormatCommand(sublime_plugin.TextCommand):
         code = view.substr(region)
         formatted_code = format(code, opts)
 
-        if(settings.get("ensure_newline_at_eof_on_save") and not formatted_code.endswith("\n")):
+        if(settings.get("ensure_newline_at_eof_on_save") and
+           not formatted_code.endswith("\n")):
             lineEnding = {
                 'system': os.linesep,
                 'windows': "\r\n",
